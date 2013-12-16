@@ -1,0 +1,34 @@
+// Build on top of Bootstrap 3
+
+$green:             #5cb85c;
+$yellow:            #f0ad4e;
+$red:               #d9534f;
+$blue:              #4D7496;
+$blue_light:        #5bc0de;
+$grey:              lighten(#000, 33.5%); // #555
+$grey_light:        lighten(#000, 60%);   // #999
+$grey_lighter:      lighten(#000, 93.5%); // #eee
+$grey_dark:         lighten(#000, 20%);   // #333
+$white:             #fff;
+$dark:              #000;
+
+
+$base:              $grey_light;
+$reverse:           $white;
+$skin:              $blue;
+
+// $brand-primary:     $skin;
+$brand-success:     $green;
+$brand-warning:     $yellow;
+$brand-danger:      $red;
+$brand-info:        $blue_light;
+
+$text_color:        $grey_dark;
+$link_color:        $skin;
+$link-hover-color:  darken($link_color, 15%);
+
+
+// breakpoints
+$breakpoint_sm:     768px;
+$breakpoint_md:     992px;
+$breakpoint_lg:     1200px;
