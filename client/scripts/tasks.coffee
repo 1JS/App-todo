@@ -2,6 +2,10 @@
 
 angular.module('app.task', [])
 
+.value('config', {
+    host: 'http://localhost:3333'
+})
+
 .factory('taskStorage', ->
     STORAGE_ID = 'tasks'
     DEMO_TASKS = '[
@@ -20,6 +24,23 @@ angular.module('app.task', [])
     }
 )
 
+.factory('Task', [
+    '$http', '$q', 'config'
+    ($http, $q, config) ->
+        return {
+            getTodos: ->
+                deferred = $q.defer()
+
+                $http( method: 'GET', url: "#{config.host}/todo")
+                    .success (data, status, headers, config) ->
+                        deferred.resolve(data)
+                    .error (data, status, headers, config) ->
+                        deferred.reject(status)
+
+                deferred.promise
+        }
+])
+
 # cusor focus when dblclick to edit
 .directive('taskFocus', [
     '$timeout'
@@ -36,10 +57,11 @@ angular.module('app.task', [])
 ])
 
 .controller('taskCtrl', [
-    '$scope', 'taskStorage', 'filterFilter', '$rootScope'
-    ($scope, taskStorage, filterFilter, $rootScope) ->
+    '$scope', 'taskStorage', 'filterFilter', '$rootScope', 'Task'
+    ($scope, taskStorage, filterFilter, $rootScope, Task) ->
 
-        tasks = $scope.tasks = taskStorage.get()
+        # tasks = $scope.tasks = taskStorage.get()
+        tasks = $scope.tasks = Task.getTodos()
 
         $scope.newTask = ''
         $scope.remainingCount = filterFilter(tasks, {completed: false}).length
@@ -120,3 +142,4 @@ angular.module('app.task', [])
             $rootScope.$broadcast('taskRemaining:changed', newVal) 
         )
 ])
+

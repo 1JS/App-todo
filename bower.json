@@ -13,8 +13,5 @@
     "font-awesome": "~4.0.3",
     "toastr": "~2.0.1",
     "underscore": "~1.5.2"
-  },
-  "resolutions": {
-    "angular": "1.2.4"
   }
 }

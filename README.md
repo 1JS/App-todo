@@ -4,6 +4,7 @@ Simple todo App built with AngularJS, ExpressJS
 
 ## Prerequisits
 - [Node.js and NPM](http://nodejs.org/)
+- [MongoDB](http://www.mongodb.org/)
 - [Ruby](https://www.ruby-lang.org/), [Sass](http://sass-lang.com/) and [Compass](http://compass-style.org/)
 - [CoffeeScript](http://coffeescript.org/)
 - [Yeoman](http://yeoman.io/) ( Including Yo, [Bower](http://bower.io/), [Grunt](http://gruntjs.com/) )
@@ -30,7 +31,13 @@ $ bower install
 $ npm install
 ```
 
-4 Run App with Grunt
+4 Run mongoDB
+
+```
+$ mongod
+```
+
+5 Run App with Node
 
 ```
 $ node app.js
@@ -54,3 +61,5 @@ todo/
     ├── 
     └── 
 </pre>
+
+# 

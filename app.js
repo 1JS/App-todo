@@ -7,7 +7,7 @@ var express = require('express')
 var app = express();
 
 app.configure(function() {
-    app.set('port', process.env.PORT || 3000)
+    app.set('port', process.env.PORT || 3333)
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(app.router);
@@ -26,11 +26,29 @@ var todoSchema = new Schema({
 
 var Todo = mongoose.model('Todo', todoSchema);
 
-// get
+// get all
 app.get("/todo", function(req, res) {
     Todo.find({}, function(err, docs) {
-        res.send(docs);
+        if (err) {
+            res.send(400);
+        } else {
+            res.send(docs);
+        }
     });
+});
+
+// handle param
+app.param("item", function(req, res, next, item) {
+    Todo.find({ title: item }, function(err, docs) {
+        req.todo = docs[0];
+        console.log (req.todo);
+        next();
+    });
+});
+
+// get one item
+app.get("/todo/:item", function(req, res) {
+    res.send(req.todo);
 });
 
 // create
@@ -40,32 +58,28 @@ app.post('/todo', function(req, res) {
         title: b.title,
         completed: b.completed
     }).save(function(err, docs){
-        if (err)
-            res.json(err);
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(docs);
+        }
     });
-});
-
-// handle param
-app.param('item', function(req, res, next, name) {
-    Todo.find({ title: item }, function(err, docs) {
-        req.todo = doc[0];
-        next();
-    });
-});
-
-app.get('/todo/:item', function(req, res) {
-    res.send(req.todo);
 });
 
 // update
 app.put('/todo/:item', function(req, res) {
     var b = req.body;
+    console.log(req.params.item);
     Todo.update(
         // query
-        {title: req.param.title},
+        {title: req.params.item},
         {title: b.title, completed: b.completed},
-        function(err) {
-
+        function(err, docs) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.status(200);
+            }
         }
     );
 })
@@ -74,13 +88,16 @@ app.put('/todo/:item', function(req, res) {
 app.delete('/todo/:item', function(req, res) {
     Todo.remove(
         // query
-        {title: req.params.title},
-        function(err) {
-
+        {title: req.params.item},
+        function(err, docs) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.status(200);
+            }
         }
-    )
+    );
 });
-
 
 
 http.createServer(app).listen(app.get('port'), function() {
