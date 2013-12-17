@@ -10,6 +10,14 @@ app.configure(function() {
     app.set('port', process.env.PORT || 3333)
     app.use(express.bodyParser());
     app.use(express.methodOverride());
+
+    // for cross origin in Dev, security hole! should only for Dev purpose
+    app.use(function(req, res, next) {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        return next();
+    });
+
     app.use(app.router);
     app.use(express.static(__dirname + "/dist"));
 });

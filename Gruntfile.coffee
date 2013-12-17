@@ -6,6 +6,7 @@ lrSnippet = require("connect-livereload")(port: LIVERELOAD_PORT)
 mountFolder = (connect, dir) ->
     connect.static require("path").resolve(dir)
 
+proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest
 
 # # Globbing
 # for performance reasons we're only matching one level down:
@@ -47,10 +48,19 @@ module.exports = (grunt) ->
                 # Change this to '0.0.0.0' to access the server from outside.
                 hostname: "localhost"
 
+            proxies: [
+                context: ["/api", "/todo"]
+                host: "localhost"
+                https: false
+                changeOrigin: false
+                xforward: false
+                port: 3333
+            ]
+
             livereload:
                 options:
                     middleware: (connect) ->
-                        [lrSnippet, mountFolder(connect, ".tmp"), mountFolder(connect, yeomanConfig.app)]
+                        [proxySnippet, lrSnippet, mountFolder(connect, ".tmp"), mountFolder(connect, yeomanConfig.app)]
 
             test:
                 options:
@@ -235,7 +245,7 @@ module.exports = (grunt) ->
     grunt.registerTask "server", (target) ->
         return grunt.task.run(["build", "open", "connect:dist:keepalive"])  if target is "dist"
         return grunt.task.run ["clean:server", "concurrent:color", "connect:livereload", "open", "watch"] if target is "color"
-        grunt.task.run ["clean:server", "concurrent:server", "connect:livereload", "open", "watch"]
+        grunt.task.run ["clean:server", "concurrent:server", 'configureProxies', "connect:livereload", "open", "watch"]
 
     grunt.registerTask "build", ["clean:dist", "useminPrepare", "concurrent:dist", "copy:dist", "concat", "uglify", "usemin"]
     grunt.registerTask "default", ["jshint", "build"]

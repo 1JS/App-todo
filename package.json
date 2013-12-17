@@ -29,7 +29,8 @@
     "grunt-google-cdn": "~0.2.0",
     "time-grunt": "~0.1.0",
     "grunt-notify": "~0.2.16",
-    "grunt-nodemon": "~0.1.2"
+    "grunt-nodemon": "~0.1.2",
+    "grunt-connect-proxy": "~0.1.6"
   },
   "engines": {
     "node": ">=0.8.0"

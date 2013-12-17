@@ -60,8 +60,12 @@ angular.module('app.task', [])
     '$scope', 'taskStorage', 'filterFilter', '$rootScope', 'Task'
     ($scope, taskStorage, filterFilter, $rootScope, Task) ->
 
-        # tasks = $scope.tasks = taskStorage.get()
-        tasks = $scope.tasks = Task.getTodos()
+        tasks = $scope.tasks = Task.getTodos().then(
+            (data) ->
+                $scope.tasks = data
+            (status) ->
+                console.log status
+        )
 
         $scope.newTask = ''
         $scope.remainingCount = filterFilter(tasks, {completed: false}).length
