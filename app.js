@@ -15,6 +15,7 @@ app.configure(function() {
     app.use(function(req, res, next) {
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         return next();
     });
 
@@ -92,16 +93,18 @@ app.put('/todo/:item', function(req, res) {
     );
 })
 
-// delete
+// delete 
 app.delete('/todo/:item', function(req, res) {
     Todo.remove(
         // query
         {title: req.params.item},
         function(err, docs) {
             if (err) {
+                console.log('undone');
                 res.send(err);
             } else {
-                res.status(200);
+                console.log('done');
+                res.send(200);
             }
         }
     );

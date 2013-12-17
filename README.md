@@ -1,6 +1,6 @@
 
 # todo
-Simple todo App built with AngularJS, ExpressJS
+Simple todo App built with AngularJS, ExpressJS, MongoDB
 
 ## Prerequisits
 - [Node.js and NPM](http://nodejs.org/)
