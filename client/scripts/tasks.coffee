@@ -12,28 +12,31 @@ angular.module('app.task', [])
         return {
             getTodos: ->
                 deferred = $q.defer()
-
                 $http( method: 'GET', url: "#{config.host}/todo")
                     .success (data, status, headers, config) ->
                         deferred.resolve(data)
                     .error (data, status, headers, config) ->
                         deferred.reject(status)
-
                 deferred.promise
 
             addTodo: (item)->
                 deferred = $q.defer()
-
                 $http( method: 'POST', url: "#{config.host}/todo", data: item)
                     .success (data, status, headers, config) ->
                         deferred.resolve(data)
                     .error (data, status, headers, config) ->
                         deferred.reject(status)
-
                 deferred.promise                
 
-            # editTodo: ->
-            #     $http
+            editTodo: (oldItemName, newItem)->
+                deferred = $q.defer()
+
+                $http( method: 'PUT', url: "#{config.host}/todo/#{oldItemName}", data: newItem)
+                    .success (data, status, headers, config) ->
+                        deferred.resolve(data)
+                    .error (data, status, headers, config) ->
+                        deferred.reject(status)
+                deferred.promise                  
 
             removeTodo: (item)->
                 itemName = item.title
@@ -44,7 +47,6 @@ angular.module('app.task', [])
                         deferred.resolve(data)
                     .error (data, status, headers, config) ->
                         deferred.reject(status)
-
                 deferred.promise  
         }
 ])
@@ -104,18 +106,6 @@ angular.module('app.task', [])
                     conosole.log status
             )
 
-        $scope.edit = (task)->
-            $scope.editedTask = task
-
-        $scope.doneEditing = (task, $index) ->
-            $scope.editedTask = null
-            task.title = task.title.trim()
-
-            if !task.title
-                $scope.remove(task, $index)
-
-            taskStorage.put(tasks)
-
         $scope.remove = (task) ->
             Task.removeTodo(task).then(
                 (res) ->
@@ -125,11 +115,40 @@ angular.module('app.task', [])
                 (status) ->
                     console.log status
             )
-            
+
+        oldItem = undefined
+        $scope.edit = (task)->
+            oldItem = angular.copy(task)
+            $scope.editedTask = task
+        $scope.doneEditing = (task, $index) ->
+            $scope.editedTask = null
+            task.title = task.title.trim()
+
+            if !task.title
+                $scope.remove(task)
+
+            Task.editTodo(oldItem.title, task).then(
+                (res) ->
+                (status) ->
+                    console.log status
+                    task.title = oldItem.title
+            )
 
         $scope.completed = (task) ->
-            $scope.remainingCount += if task.completed then -1 else 1
-            taskStorage.put(tasks)
+            Task.editTodo(task.title, task).then(
+                (res) ->
+                    $scope.remainingCount += if task.completed then -1 else 1
+                (status) ->
+                    console.log status
+            )
+
+
+
+
+
+
+
+
 
 
         $scope.clearCompleted = ->

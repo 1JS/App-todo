@@ -1,6 +1,6 @@
 
 # todo
-Simple todo App built with AngularJS, ExpressJS, MongoDB
+Simple todo App built with AngularJS, ExpressJS, and MongoDB
 
 ## Prerequisits
 - [Node.js and NPM](http://nodejs.org/)
@@ -31,7 +31,7 @@ $ bower install
 $ npm install
 ```
 
-4 Run mongoDB
+4 Run mongoDB in new tab
 
 ```
 $ mongod
@@ -47,19 +47,18 @@ $ node app.js
 
 <pre>
 todo/
-├── /
+├── client/
 │   ├── 
 │   ├── 
 │   ├── 
 │   └── 
-├── /
+├── server/
 │   ├──
 │   └── 
-└── /
-    ├── 
-    ├── 
-    ├── 
-    └── 
+├── .bowerrc
+├── 
+├── 
+├── 
+└──  
 </pre>
 
-# 

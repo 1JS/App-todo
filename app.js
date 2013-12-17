@@ -87,7 +87,7 @@ app.put('/todo/:item', function(req, res) {
             if (err) {
                 res.send(err);
             } else {
-                res.status(200);
+                res.send(200);
             }
         }
     );
@@ -100,10 +100,8 @@ app.delete('/todo/:item', function(req, res) {
         {title: req.params.item},
         function(err, docs) {
             if (err) {
-                console.log('undone');
                 res.send(err);
             } else {
-                console.log('done');
                 res.send(200);
             }
         }
