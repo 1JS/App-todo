@@ -38,6 +38,17 @@ angular.module('app.task', [])
                         deferred.reject(status)
                 deferred.promise                  
 
+            markAll: (completed) ->
+                data = {completed: completed}
+
+                deferred = $q.defer()
+                $http( method: 'PUT', url: "#{config.host}/todoAll", data: data)
+                    .success (data, status, headers, config) ->
+                        deferred.resolve(data)
+                    .error ( data, status, headers, config ) ->
+                        deferred.reject(status)
+                deferred.promise 
+
             removeTodo: (item)->
                 itemName = item.title
                 deferred = $q.defer()
@@ -47,7 +58,17 @@ angular.module('app.task', [])
                         deferred.resolve(data)
                     .error (data, status, headers, config) ->
                         deferred.reject(status)
-                deferred.promise  
+                deferred.promise
+
+            removeCompleted: ()->
+                deferred = $q.defer()
+
+                $http( method: 'DELETE', url: "#{config.host}/todoCompleted")
+                    .success (data, status, headers, config) ->
+                        deferred.resolve(data)
+                    .error (data, status, headers, config) ->
+                        deferred.reject(status)
+                deferred.promise
         }
 ])
 
@@ -73,12 +94,12 @@ angular.module('app.task', [])
         tasks = $scope.tasks = Task.getTodos().then(
             (data) ->
                 $scope.tasks = data
+                $scope.remainingCount = filterFilter($scope.tasks, {completed: false}).length
             (status) ->
                 console.log status
         )
 
         $scope.newTask = ''
-        $scope.remainingCount = filterFilter($scope.tasks, {completed: false}).length
         $scope.editedTask = null
         $scope.statusFilter = {completed: false}
 
@@ -142,27 +163,18 @@ angular.module('app.task', [])
                     console.log status
             )
 
-
-
-
-
-
-
-
-
-
-        $scope.clearCompleted = ->
-            $scope.tasks = tasks = tasks.filter( (val) ->
-                return !val.completed
-            )
-            taskStorage.put(tasks)
-
         $scope.markAll = (completed)->
-            tasks.forEach( (task) ->
+            Task.markAll(completed)
+            $scope.tasks.forEach( (task) ->
                 task.completed = completed
             )
             $scope.remainingCount = if completed then 0 else tasks.length
-            taskStorage.put(tasks)
+
+        $scope.clearCompleted = ->
+            Task.removeCompleted()
+            $scope.tasks = $scope.tasks.filter( (val) ->
+                return !val.completed
+            )
 
         $scope.$watch('remainingCount == 0', (val) ->
             $scope.allChecked = val

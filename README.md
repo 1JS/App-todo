@@ -43,22 +43,37 @@ $ mongod
 $ node app.js
 ```
 
+6 Open the site, default is 
+```
+http://localhost:3333/
+```
+
 ## File structure
 
 <pre>
 todo/
-├── client/
-│   ├── 
-│   ├── 
-│   ├── 
-│   └── 
-├── server/
+├── client/                         ---> Front end
+│   ├── fonts
+│   ├── images
+│   ├── scripts
+│   ├── styles
+│   ├── views
+│   └── index.html
+├── server/                         ---> Back end
 │   ├──
 │   └── 
-├── .bowerrc
-├── 
-├── 
-├── 
-└──  
+├── .bowerrc                        ---> Configure file of Bower
+├── .gitignore
+├── .jshintrc                       ---> Configure file of JSHint
+├── app.js                          
+├── bower.json                      ---> The JSON file of Twitter Bower
+├── conf.js                         ---> The Config file of the project
+├── Gruntfile.coffee                ---> The configure file of Grunt
+├── package.json                    ---> The JSON file of Grunt
+└── README.md                       ---> The file you are reading :)
 </pre>
 
+## Issues
+- Things work expectly when have items that has same name.
+    - Can not check item with same name, only one of them is checked when refresh. 
+    - When delete one of the item, the rest items that has the same name will be deleted as well.

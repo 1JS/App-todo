@@ -2,12 +2,13 @@
 var express = require('express')
   , mongoose = require('mongoose')
   , http = require('http')
+  , conf = require('./conf.js')
 ;
 
 var app = express();
 
 app.configure(function() {
-    app.set('port', process.env.PORT || 3333)
+    app.set('port', conf.server.port || 3000)
     app.use(express.bodyParser());
     app.use(express.methodOverride());
 
@@ -24,7 +25,7 @@ app.configure(function() {
 });
 
 
-mongoose.connect("mongodb://localhost/todo");
+mongoose.connect("mongodb://localhost/" + conf.mongodb.database);
 
 var Schema = mongoose.Schema;
 
@@ -50,7 +51,7 @@ app.get("/todo", function(req, res) {
 app.param("item", function(req, res, next, item) {
     Todo.find({ title: item }, function(err, docs) {
         req.todo = docs[0];
-        console.log (req.todo);
+        // console.log (req.todo);
         next();
     });
 });
@@ -78,11 +79,29 @@ app.post('/todo', function(req, res) {
 // update
 app.put('/todo/:item', function(req, res) {
     var b = req.body;
-    console.log(req.params.item);
+    // console.log(req.params.item);
     Todo.update(
         // query
         {title: req.params.item},
         {title: b.title, completed: b.completed},
+        function(err, docs) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send(200);
+            }
+        }
+    );
+})
+
+// update all
+app.put('/todoAll', function(req, res) {
+    var b = req.body;
+    // console.log('b: '+ b.completed);
+    Todo.update(
+        {completed: !b.completed},
+        {$set: {completed: b.completed}},
+        {multi: true},
         function(err, docs) {
             if (err) {
                 res.send(err);
@@ -107,6 +126,20 @@ app.delete('/todo/:item', function(req, res) {
         }
     );
 });
+
+// delete completed
+app.delete('/todoCompleted', function(req, res) {
+    Todo.remove(
+        {completed: true},
+        function(err, docs) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send(200);
+            }
+        }
+    );
+})
 
 
 http.createServer(app).listen(app.get('port'), function() {
