@@ -45,9 +45,9 @@ $ mongod
 $ node app.js
 ```
 
-6 Open the site, default is 
+6 You can run and develop with command
 ```
-http://localhost:3333/
+$ grunt server
 ```
 
 ## File structure
