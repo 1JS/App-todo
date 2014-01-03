@@ -2,6 +2,8 @@
 # todo
 Simple todo App built with AngularJS, ExpressJS, and MongoDB
 
+![Alt text](./docs/screenshot.png)
+
 ## Prerequisits
 - [Node.js and NPM](http://nodejs.org/)
 - [MongoDB](http://www.mongodb.org/)
@@ -62,6 +64,7 @@ todo/
 ├── server/                         ---> Back end
 │   ├──
 │   └── 
+├── docs                            
 ├── .bowerrc                        ---> Configure file of Bower
 ├── .gitignore
 ├── .jshintrc                       ---> Configure file of JSHint
@@ -74,6 +77,6 @@ todo/
 </pre>
 
 ## Issues
-- Things work expectly when have items that has same name.
+- Things work unexpectly when having items with same name.
     - Can not check item with same name, only one of them is checked when refresh. 
     - When delete one of the item, the rest items that has the same name will be deleted as well.
