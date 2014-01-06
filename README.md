@@ -16,10 +16,10 @@ Simple todo App built with AngularJS, ExpressJS, and MongoDB
 - CoffeeScript for JS
 
 ## How to run it?
-1 Enter file direcotry
+1 Enter project directory
 
 ```
-$ cd todo
+$ cd App-todo
 ```
 
 2 Install front-end packages with Bower
@@ -45,7 +45,7 @@ $ mongod
 $ node app.js
 ```
 
-6 You can run and develop with command
+6 You can run and develop with command in new tab
 ```
 $ grunt server
 ```
